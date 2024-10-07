@@ -11,7 +11,6 @@ import util.C;
 public class Restaurante {
     private int nro;
     public int capacidad;
-    private Semaphore lugares;
     private BlockingQueue<Visitante> cola_visitantes;
     private int lugares_ocupados;
 

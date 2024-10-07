@@ -7,7 +7,7 @@ import recursos.*;
 
 public class Visitante extends Thread{
     private final String id;
-    private final String tipo_acceso; // "Particular" o "Tour"s
+    private final String tipo_acceso; // "Particular" o "Tour"
     private boolean doble;
     private Parque parque;
     public boolean almuerzo;
@@ -24,7 +24,7 @@ public class Visitante extends Thread{
 
     @Override
     public void run() {
-        ir_carrera();
+        ir_faro();
         while (true) {
         }
         // while (true) { //mientras este abierto (me falta ver eso)
@@ -53,17 +53,20 @@ public class Visitante extends Thread{
 
     private void ir_restaurante(){
         try {
+
             Random r = new Random();
             int nro_res = r.nextInt(3); //restaurante random
+            Restaurante res_elegido = parque.getRestaurantes()[nro_res];
+
             if (!almuerzo){ //puede ir solo si puede realizar alguna de estas dos cosas 
-                parque.entrar_restaurante(nro_res, this, 1);
+                res_elegido.almorzar(this);;
                 dormir(3000);
-                parque.salir_restaurante(nro_res, this);
+                res_elegido.salir(this);
                 almuerzo = true;
             } else if(!merienda){
-                parque.entrar_restaurante(nro_res, this, 2);
+                res_elegido.merendar(this);
                 dormir(3000);
-                parque.salir_restaurante(nro_res, this);
+                res_elegido.salir(this);
                 merienda = true;
             }
             //nadie merienda y almuerza a la vez, ni tampoco lo hace 2 veces
@@ -98,9 +101,10 @@ public class Visitante extends Thread{
 
     private void ir_snorkell() {
         try {
-            parque.ir_snorkell(this);
+            Snorkell snorkell = parque.getSnorkell();
+            snorkell.solicitar_equipo(this);
             dormir(10000);
-            parque.salir_snorkell(this);   
+            snorkell.dejar_equipo(this);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -108,7 +112,20 @@ public class Visitante extends Thread{
     }
 
     private void ir_faro(){
+        Faro faro = parque.getFaro();
 
+        try {
+            faro.subir_escaleras(this);
+            dormir(3000);
+            faro.dejar_escaleras(this);
+            faro.subir_tobogan(this);
+            dormir(3500);
+            faro.dejar_tobogan(this);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
     }
 
      public void dormir(int bound){

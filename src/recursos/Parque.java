@@ -6,34 +6,31 @@ public class Parque {
     public Snorkell snorkell;
     public Restaurante[] restaurantes = new Restaurante[3];
     public Carrera carrera;
+    public Faro faro;
 
     public Parque(){
         snorkell = new Snorkell();
         carrera = new Carrera();
+        faro = new Faro();
         for (int i = 0; i < restaurantes.length; i++) {
             restaurantes[i] = new Restaurante(i);
         }
     }
 
-    public void ir_snorkell(Visitante v) throws InterruptedException{
-        snorkell.solicitar_equipo(v);
+    public Snorkell getSnorkell(){
+        return snorkell;
     }
 
-    public void salir_snorkell(Visitante v) throws InterruptedException{
-        snorkell.dejar_equipo(v);
+    public Restaurante[] getRestaurantes(){
+        return restaurantes;
     }
 
-    public void entrar_restaurante(int nro_restaurante, Visitante v, int opcion_menu) throws InterruptedException{
-        Restaurante res_elegido = restaurantes[nro_restaurante];
-        if (opcion_menu == 1){ //opcion 1 es almuerzo
-            res_elegido.almorzar(v);
-        } else { //opcion 2 es merienda
-            res_elegido.merendar(v);
-        }
+    public Carrera getCarrera(){
+        return carrera;
     }
 
-    public void salir_restaurante(int nro_restaurante, Visitante v) throws InterruptedException{
-        restaurantes[nro_restaurante].salir(v);
+    public Faro getFaro(){
+        return faro;
     }
 
     

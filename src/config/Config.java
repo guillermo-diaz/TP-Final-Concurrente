@@ -2,7 +2,7 @@ package config;
 
 public class Config {
 
-    public static int CANT_VISITANTES = 20;
+    public static int CANT_VISITANTES = 10;
     public static int CANT_MOLINETES = 30; //k molinetes
     public static int CAPACIDAD_COLECTIVO = 25;
     public static int HORA_APERTURA = 9;
@@ -21,7 +21,8 @@ public class Config {
     public static int CANT_GOMON_DOBLES = 2;
     public static int CANT_GOMON_SIMPLES = 4;
 
-
+    // faro mirador
+    public static int CAPACIDAD_ESCALERA_FARO = 5;
 
 
     

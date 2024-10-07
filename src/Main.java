@@ -1,6 +1,7 @@
 import java.util.Random;
 
 import config.Config;
+import hilos.AdminFaro;
 import hilos.Asistente;
 import hilos.Visitante;
 import recursos.Parque;
@@ -11,16 +12,20 @@ public class Main {
         Visitante[] visitantes = new Visitante[Config.CANT_VISITANTES];
         Asistente asistente1 = new Asistente("A1", p);
         Asistente asistente2 = new Asistente("A2", p);
+        AdminFaro admin = new AdminFaro("ADMIN", p);
         asistente1.start();
         asistente2.start();
+        admin.start();
 
         for (int i = 0; i < visitantes.length; i++) {
             visitantes[i] = new Visitante("#"+i, null, p, (get_random(1) == 1) ? true : false);
-            if(visitantes[i].quiere_doble()){
-                System.out.println("#"+i+" doble");
-            } else{
-                System.out.println("#"+i+" simple");
-            }
+
+            // pa la carrera test
+            // if(visitantes[i].quiere_doble()){
+            //     System.out.println("#"+i+" doble");
+            // } else{
+            //     System.out.println("#"+i+" simple");
+            // }
         }
 
         for (int i = 0; i < visitantes.length; i++) {
