@@ -7,11 +7,13 @@ public class Parque {
     public Restaurante[] restaurantes = new Restaurante[3];
     public Carrera carrera;
     public Faro faro;
+    public Tienda shop;
 
     public Parque(){
         snorkell = new Snorkell();
         carrera = new Carrera();
         faro = new Faro();
+        shop = new Tienda();
         for (int i = 0; i < restaurantes.length; i++) {
             restaurantes[i] = new Restaurante(i);
         }
@@ -31,6 +33,10 @@ public class Parque {
 
     public Faro getFaro(){
         return faro;
+    }
+
+    public Tienda getTienda(){
+        return shop;
     }
 
     

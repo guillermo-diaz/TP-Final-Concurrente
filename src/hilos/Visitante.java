@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 
 import recursos.*;
+import util.C;
 
 public class Visitante extends Thread{
     private final String id;
@@ -24,7 +25,7 @@ public class Visitante extends Thread{
 
     @Override
     public void run() {
-        ir_faro();
+        ir_tienda();
         while (true) {
         }
         // while (true) { //mientras este abierto (me falta ver eso)
@@ -79,7 +80,17 @@ public class Visitante extends Thread{
     }
 
     private void ir_tienda(){
-        Random r = new Random();
+        try {
+            Tienda tienda = parque.getTienda();
+            System.out.println(id+" entró a la tienda");
+            dormir(get_random(3000, 15000)); //simula tiempo que pasa en la tienda eligiendo el souvenir
+            // System.out.println(C.PURPLE+id+" encontró un souvenir en la tienda"+C.RESET);
+            tienda.pagar(this);
+            dormir(get_random(5000)); //paga
+            tienda.salir_shop(this);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
   
 
 
@@ -142,12 +153,12 @@ public class Visitante extends Thread{
         return id;
     }
 
-    public int get_random(int limite){
+    private int get_random(int limite){
         Random r = new Random();
         return r.nextInt(limite+1);
     }
 
-    public int get_random(int inicio, int limite){
+    private int get_random(int inicio, int limite){
         Random r = new Random();
         return r.nextInt(limite-inicio)+inicio;
     }
