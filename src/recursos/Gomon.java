@@ -45,6 +45,7 @@ class GomonDoble extends Gomon {
 
         private int cant_actual;
         private Semaphore sem_espera;
+        private Semaphore lugares = new Semaphore(2);
     
         public GomonDoble(int id, Carrera c) {
             super(id, "Doble", c);
@@ -53,41 +54,27 @@ class GomonDoble extends Gomon {
         }
 
         @Override
-        public synchronized void usar() throws InterruptedException {
-            while (ocupado) {
-                wait(); // Espera hasta que el gomon esté disponible
-            }
+        public void usar() throws InterruptedException {
+            lugares.acquire();
             cant_actual++;
             if (cant_actual == 2) {
                 ocupado = true;
-                cant_actual = 0;
-                notifyAll(); // Notifica que el gomon está ocupado
+                sem_espera.release(); //le avisa al compañero que ya estan completos
             } else {
-                while (!ocupado) {
-                    wait(); // Espera al segundo pasajero
-                }
+                sem_espera.acquire();
             }
         }
 
         @Override
-        public synchronized void dejar()  {
+        public void dejar()  {
             cant_actual--;
             if (cant_actual == 0){ //el ultimo en salir
                 ocupado = false;
-                this.notifyAll(); //avisa que lo desocupo
                 carrera.getGomonesDobles().offer(this); //lo pone en la carrera que corresponde
-            }
+            } 
+            lugares.release();
         }
 
-        //espera que su compañero le avise que ya arranco la carrera
-        public void esperar_aviso() throws InterruptedException{
-            sem_espera.acquire();
-        }
-
-        //le avisa que arranco la carrera
-        public void avisar_compañero(){
-            sem_espera.release();
-        }
 
         @Override
         public boolean vacio(){

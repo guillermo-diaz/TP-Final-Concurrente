@@ -50,7 +50,9 @@ public class Carrera {
 
         if (doble){
             GomonDoble gomonD;
-            escribir(C.AMARILLO,"Visitante " + v.getID() + " espera un gomon doble ");
+            if (gomonesDobleDisponibles.size() == 0){
+                escribir(C.AMARILLO,"Visitante " + v.getID() + " espera un gomon doble ");
+            }
             gomonD = gomonesDobleDisponibles.take(); 
             gomonRet = gomonD;
 
@@ -61,15 +63,14 @@ public class Carrera {
                 gomonD.usar();
                 escribir(C.VERDE,"Visitante " + v.getID() + " agarro el gomon doble N°" +gomonD.getID());
                 barrier.await();
-                gomonD.avisar_compañero(); //le avisa al compañero para empezar la carrera
             } else { //si es el acompañante espera que su acompañanente le avise que inició la carrera
                 gomonD.usar();
                 escribir(C.VERDE,"Visitante " + v.getID() + " agarro el gomon doble N°" +gomonD.getID());
-                gomonD.esperar_aviso();
             }
         } else {
-          
-            escribir(C.AMARILLO,"Visitante " + v.getID() + " espera un gomon simple ");
+            if (gomonesSimpleDisponibles.size() == 0){
+                escribir(C.AMARILLO,"Visitante " + v.getID() + " espera un gomon simple ");
+            }
             Gomon gomon = gomonesSimpleDisponibles.take();
             gomonRet = gomon;
 

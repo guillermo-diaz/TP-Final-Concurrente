@@ -25,7 +25,7 @@ public class Visitante extends Thread{
 
     @Override
     public void run() {
-        ir_tienda();
+        ir_carrera();
         while (true) {
         }
         // while (true) { //mientras este abierto (me falta ver eso)
@@ -83,7 +83,7 @@ public class Visitante extends Thread{
         try {
             Tienda tienda = parque.getTienda();
             System.out.println(id+" entró a la tienda");
-            dormir(get_random(3000, 15000)); //simula tiempo que pasa en la tienda eligiendo el souvenir
+            sleep(get_random(3000, 15000)); //simula tiempo que pasa en la tienda eligiendo el souvenir
             // System.out.println(C.PURPLE+id+" encontró un souvenir en la tienda"+C.RESET);
             tienda.pagar(this);
             dormir(get_random(5000)); //paga

@@ -21,11 +21,11 @@ public class Main {
             visitantes[i] = new Visitante("#"+i, null, p, (get_random(1) == 1) ? true : false);
 
             // pa la carrera test
-            // if(visitantes[i].quiere_doble()){
-            //     System.out.println("#"+i+" doble");
-            // } else{
-            //     System.out.println("#"+i+" simple");
-            // }
+            if(visitantes[i].quiere_doble()){
+                System.out.println("#"+i+" doble");
+            } else{
+                System.out.println("#"+i+" simple");
+            }
         }
 
         for (int i = 0; i < visitantes.length; i++) {
