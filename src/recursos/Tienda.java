@@ -20,7 +20,7 @@ public class Tienda {
 
     public void salir_shop(Visitante v) {
         escribir(C.ROJO, v.getID()+" salio de la caja");
-        cajas_disponibles--;
+        cajas_disponibles++;
         cajas.release(1); 
     }
 

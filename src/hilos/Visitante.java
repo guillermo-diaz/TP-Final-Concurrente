@@ -25,8 +25,8 @@ public class Visitante extends Thread{
 
     @Override
     public void run() {
-        ir_carrera();
         while (true) {
+            ir_carrera();
         }
         // while (true) { //mientras este abierto (me falta ver eso)
         //     Random r = new Random();
@@ -100,8 +100,9 @@ public class Visitante extends Thread{
         Carrera car = parque.carrera;
     
         try {
+            // car.acceder_tren(this);
             Gomon g = car.usar_gomon(this, doble);
-            dormir(8000);
+            dormir(10000);
             car.dejar_gomon(this, g);
         } catch (InterruptedException | BrokenBarrierException e) {
             // TODO Auto-generated catch block

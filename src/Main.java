@@ -3,6 +3,7 @@ import java.util.Random;
 import config.Config;
 import hilos.AdminFaro;
 import hilos.Asistente;
+import hilos.Tren;
 import hilos.Visitante;
 import recursos.Parque;
 
@@ -13,9 +14,11 @@ public class Main {
         Asistente asistente1 = new Asistente("A1", p);
         Asistente asistente2 = new Asistente("A2", p);
         AdminFaro admin = new AdminFaro("ADMIN", p);
+        Tren tren = new Tren(p);
         asistente1.start();
         asistente2.start();
         admin.start();
+        tren.start();
 
         for (int i = 0; i < visitantes.length; i++) {
             visitantes[i] = new Visitante("#"+i, null, p, (get_random(1) == 1) ? true : false);
