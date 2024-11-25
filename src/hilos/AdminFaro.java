@@ -5,7 +5,7 @@ import recursos.Parque;
 import recursos.Snorkell;
 
 public class AdminFaro extends Thread{
-     private final String id;
+    private final String id;
     private final Faro faro;
     private final Parque parque;
 
@@ -21,7 +21,7 @@ public class AdminFaro extends Thread{
             faro.administrar();
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            
         }
     }
 

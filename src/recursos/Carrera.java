@@ -1,5 +1,6 @@
 package recursos;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.BrokenBarrierException;
@@ -15,6 +16,7 @@ import hilos.Visitante;
 import util.C;
 
 public class Carrera {
+    private Parque p;
     private int cant_gomones; // cantidad de gomonos para que salgan
     private int gomones_dobles;
     private int gomones_simples;
@@ -41,6 +43,7 @@ public class Carrera {
    
 
     public Carrera(){
+
         gomones_dobles = Config.CANT_GOMON_DOBLES;
         gomones_simples = Config.CANT_GOMON_SIMPLES;
         cant_gomones = Config.NUMERO_GOMONES;
@@ -197,6 +200,7 @@ public class Carrera {
     private void escribir(String color, String cad){
         System.out.println(color+cad+C.RESET);
     }
+
 
     public BlockingQueue<Gomon> getGomonesSimples(){
         return this.gomonesSimpleDisponibles;

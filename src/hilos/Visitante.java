@@ -3,6 +3,7 @@ package hilos;
 import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 
+import config.Config;
 import recursos.*;
 import util.C;
 
@@ -25,31 +26,100 @@ public class Visitante extends Thread{
 
     @Override
     public void run() {
-        while (true) {
-            ir_carrera();
+        try {
+            if (tipo_acceso.toLowerCase() == "tour"){
+                parque.acceder_tour(this);
+            }
+            parque.entrar(this); //intenta entrar
+
+            if (Config.PRUEBA_INDIVIDUAL){
+                actividad_individual();
+            } else {
+                actividades(); //ya entro, intento acceder a las actividades
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        // while (true) { //mientras este abierto (me falta ver eso)
-        //     Random r = new Random();
-        //     switch (r.nextInt(6)) { //actividad aleatoria
-        //         case 0:
-        //             ir_tienda();
-        //             break;
-        //         case 1:
-        //             ir_faro();
-        //             break;
-        //         case 2:
-        //             ir_restaurante();
-        //             break;
-        //         case 4:
-        //             ir_snorkell();
-        //             break;
-        //         default:
-        //             ir_carrera();
-        //             break;
-        //     }
-            
-        // }
         
+    }
+    
+    public void actividad_individual(){
+        String act = Config.ACTIVIDAD_AISLADA.toLowerCase();
+
+        try {
+            switch (act) {
+                case "restaurante":
+                    while (parque.esperar_apertura()) {
+                        ir_restaurante();
+                    }
+                    break;
+            
+                case "snorkell":
+                    while (parque.esperar_apertura()) {
+                        ir_snorkell();
+                    }
+                    break;
+            
+                case "faro":
+                    while (parque.esperar_apertura()) {
+                        ir_faro();
+                    }
+                    break;
+            
+                case "tienda":
+                    while (parque.esperar_apertura()) {
+                        ir_tienda();
+                    }
+                    break;    
+                case "carrera":
+                    while (parque.esperar_apertura()) {
+                        ir_carrera();
+                    }
+                    break;
+            
+                default:
+                    System.out.println("Actividad no reconocida: " + act);
+                    break;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+       
+        
+    }
+
+    public void actividades(){
+        
+        try {
+            while (parque.esperar_apertura()) { //mientras este abierto 
+                Random r = new Random();
+                switch (r.nextInt(6)) { //actividad aleatoria
+                    case 0:
+                        ir_tienda();
+                        break;
+                    case 1:
+                        ir_faro();
+                        break;
+                    case 2:
+                        ir_restaurante();
+                        break;
+                    case 4:
+                        ir_snorkell();
+                        break;
+                    default:
+                        // ir_carrera();
+                        break;
+                }
+                
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     private void ir_restaurante(){
@@ -82,8 +152,8 @@ public class Visitante extends Thread{
     private void ir_tienda(){
         try {
             Tienda tienda = parque.getTienda();
-            System.out.println(id+" entró a la tienda");
-            sleep(get_random(3000, 15000)); //simula tiempo que pasa en la tienda eligiendo el souvenir
+            tienda.entrar(this);
+            sleep(get_random(3000, 10000)); //simula tiempo que pasa en la tienda eligiendo el souvenir
             // System.out.println(C.PURPLE+id+" encontró un souvenir en la tienda"+C.RESET);
             tienda.pagar(this);
             dormir(get_random(5000)); //paga

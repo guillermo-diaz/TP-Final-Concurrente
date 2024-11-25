@@ -15,7 +15,7 @@ public class Horario {
     public Horario(JLabel horaGUI, Parque p) {
         this.APERTURA = Config.HORA_APERTURA;
         this.CIERRE = Config.HORA_CIERRE;
-        this.hora = APERTURA; 
+        this.hora = APERTURA - 1; 
         this.minuto = 0;
         this.horaUI = horaGUI; //de la interfaz
         this.parque = p;  
@@ -30,7 +30,7 @@ public class Horario {
                 parque.cerrar();
             }
             if (hora == APERTURA) {
-                parque.cerrar();
+                parque.abrir();
             }            
         }
         horaUI.setText(getHora());
