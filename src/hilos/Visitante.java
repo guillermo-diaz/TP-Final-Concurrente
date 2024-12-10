@@ -28,16 +28,7 @@ public class Visitante extends Thread{
     @Override
     public void run() {
         try {
-            if (tipo_acceso.toLowerCase().equals("tour")){
-                parque.acceder_tour(this);
-            }
-            parque.entrar(this); //intenta entrar
-
-            if (Config.PRUEBA_INDIVIDUAL){
-                actividad_individual();
-            } else {
-                actividades(); //ya entro, intento acceder a las actividades
-            }
+            acceder_parque();
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -46,6 +37,19 @@ public class Visitante extends Thread{
             e.printStackTrace();
         }
         
+    }
+
+    public void acceder_parque() throws InterruptedException, BrokenBarrierException{
+        if (tipo_acceso.toLowerCase().equals("tour")){
+            parque.acceder_tour(this);
+        }
+        parque.entrar(this); //intenta entrar
+
+        if (Config.PRUEBA_INDIVIDUAL){
+            actividad_individual();
+        } else {
+            actividades(); //ya entro, intento acceder a las actividades
+        }
     }
     
     public void actividad_individual(){
@@ -115,9 +119,15 @@ public class Visitante extends Thread{
                         ir_carrera();
                         break;
                 }
+
+                if (!parque.abierto){
+                    break;
+                }
                 
             }
-        } catch (InterruptedException e) {
+            parque.salir(this);
+            acceder_parque(); //intenta accede de vuelta porque ya salio
+        } catch (InterruptedException | BrokenBarrierException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

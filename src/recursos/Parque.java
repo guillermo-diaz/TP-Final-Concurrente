@@ -98,6 +98,10 @@ public class Parque {
         abierto = false;
     }
 
+    public synchronized boolean esta_abierto(){
+        return abierto;
+    }
+
     public Snorkell getSnorkell(){
         return snorkell;
     }
