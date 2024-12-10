@@ -1,5 +1,6 @@
 package config;
 
+
 public class Config {
    
 
@@ -7,7 +8,7 @@ public class Config {
     public static int HORA_CIERRE = 16;
     public static int DELAY_RELOJ = 70; // en ms
 
-    public static int CANT_VISITANTES = 30;
+    public static int CANT_VISITANTES = 20;
     public static int CANT_MOLINETES = 25; //k molinetes
     public static int CAPACIDAD_COLECTIVO = 15;
 
@@ -30,12 +31,12 @@ public class Config {
 
 
     
-
-    /*para probar una actividad en particular, 
-    El visitante solo realizará dicha actividad solamente en vez de ser random
-    */
-    public static boolean PRUEBA_INDIVIDUAL = false; 
+    
+    
+    /* Para probar una actividad en particular, 
+    el visitante solo realizará dicha actividad solamente en vez de ser random */
+    public static boolean PRUEBA_INDIVIDUAL = true; 
     //poner alguna actividad que quiera probar, poner el nombre completo. Ejemplo: restaurante/carrera/faro/tienda/snorkell
-    public static String ACTIVIDAD_AISLADA = "Ninguna";  
+    public static String ACTIVIDAD_AISLADA = "carrera";  
 
 }

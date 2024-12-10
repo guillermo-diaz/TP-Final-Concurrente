@@ -38,7 +38,7 @@ public class Parque {
 
     public Parque(){
         snorkell = new Snorkell(this);
-        carrera = new Carrera();
+        carrera = new Carrera(this);
         faro = new Faro(this);
         shop = new Tienda(this);
         limite = Config.CANT_MOLINETES;
@@ -71,10 +71,10 @@ public class Parque {
 
     public synchronized void entrar(Visitante v) throws InterruptedException{
         while (!abierto || cant_actual >= limite) {
-            escribir(C.AMARILLO, Color.yellow, v.getID()+" espera en la entrada");
+            //escribir(C.AMARILLO, Color.yellow, v.getID()+" espera en la entrada");
             wait();
         }
-        escribir(C.VERDE, Color.green, v.getID()+" entró al parque");
+        //escribir(C.VERDE, Color.green, v.getID()+" entró al parque");
         cant_actual++;
     }
 

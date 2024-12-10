@@ -35,11 +35,11 @@ public class Main { static Thread[] hilos;
             j++;
 
             // pa la carrera test
-            // if(visitantes[i].quiere_doble()){
-            //     System.out.println("#"+i+" doble");
-            // } else{
-            //     System.out.println("#"+i+" simple");
-            // }
+            if(visitantes[i].quiere_doble()){
+                System.out.println("#"+i+" doble");
+            } else{
+                System.out.println("#"+i+" simple");
+            }
         }
 
         GUI gui = new GUI(hilos);

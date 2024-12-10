@@ -7,6 +7,7 @@ import config.Config;
 import recursos.*;
 import util.C;
 
+
 public class Visitante extends Thread{
     private final String id;
     private final String tipo_acceso; // "Particular" o "Tour"
@@ -171,9 +172,9 @@ public class Visitante extends Thread{
     
         try {
             // car.acceder_tren(this);
-            Gomon g = car.usar_gomon(this, doble);
-            dormir(10000);
-            car.dejar_gomon(this, g);
+            GomonH g = car.usar_gomon(this, doble);
+            g.subir(this);
+            g.iniciar_carrera(this);
         } catch (InterruptedException | BrokenBarrierException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

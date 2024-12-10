@@ -5,6 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 
+import config.Config;
 import GUI.PrintConsola;
 import config.Config;
 import hilos.Visitante;
