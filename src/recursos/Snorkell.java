@@ -20,6 +20,7 @@ public class Snorkell {
     private Condition avisar_asistente;
     private Condition equipo_disponible;
 
+    //gui
     private Semaphore mutexConsola= new Semaphore(1);
 
     public Snorkell(Parque p){

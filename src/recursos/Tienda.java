@@ -11,6 +11,8 @@ public class Tienda {
     private Parque parque;
     private int cajas_usadas = 0;
     private Semaphore cajas = new Semaphore(2, true);
+
+    //gui
     private Semaphore mutexConsola= new Semaphore(1);
 
     public Tienda(Parque p){

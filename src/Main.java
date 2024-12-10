@@ -30,16 +30,9 @@ public class Main { static Thread[] hilos;
         int j = 5;
 
         for (int i = 0; i < visitantes.length; i++) {
-            visitantes[i] = new Visitante("#"+i, "Particular", p, (get_random(1) == 1) ? true : false);
+            visitantes[i] = new Visitante("#"+i, (get_random(1) == 1) ? "Particular" : "Tour", p, (get_random(1) == 1) ? true : false);
             hilos[j] = visitantes[i];
             j++;
-
-            // pa la carrera test
-            if(visitantes[i].quiere_doble()){
-                System.out.println("#"+i+" doble");
-            } else{
-                System.out.println("#"+i+" simple");
-            }
         }
 
         GUI gui = new GUI(hilos);

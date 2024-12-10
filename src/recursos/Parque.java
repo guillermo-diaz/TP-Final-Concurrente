@@ -25,16 +25,18 @@ public class Parque {
     public boolean abierto;
     public int cant_actual;
     public int limite;
-    public JTextPane[] consolas = new JTextPane[7];
-    public GUI gui;
-    private Semaphore mutexConsola= new Semaphore(1);
+    
+    
+ 
     private int espacioCol;
 
     //tour
-    private Semaphore mutexCole = new Semaphore(1);
-    private int esperandoCole = 0;
     private CyclicBarrier colectivoBarrier;
 
+    //gui
+    public GUI gui;
+    public JTextPane[] consolas = new JTextPane[7];
+    private Semaphore mutexConsola= new Semaphore(1);
 
     public Parque(){
         snorkell = new Snorkell(this);
@@ -46,8 +48,7 @@ public class Parque {
 
         colectivoBarrier = new CyclicBarrier(espacioCol, () -> {
             try {
-                Thread.sleep(3000); 
-                esperandoCole = esperandoCole - espacioCol; //le resto los pasajeros que ya subieron
+                Thread.sleep(3000); //tiempo que tarda en llevarlos el cole
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restaurar el estado de interrupción del hilo
             }
@@ -61,20 +62,17 @@ public class Parque {
     }
 
     public void acceder_tour(Visitante v) throws InterruptedException, BrokenBarrierException{
-        mutexCole.acquire();
-        esperandoCole++;
-        escribir(C.BLANCO, Color.WHITE, v.getID()+" espera cole: "+esperandoCole+"/"+espacioCol);
-        mutexCole.release();
+        escribir(C.BLANCO, Color.WHITE, v.getID()+" espera cole para acceder: ");
         colectivoBarrier.await();
         escribir(C.PURPLE, Color.magenta, v.getID()+" accedio por Tour al parque");
     }
 
     public synchronized void entrar(Visitante v) throws InterruptedException{
         while (!abierto || cant_actual >= limite) {
-            //escribir(C.AMARILLO, Color.yellow, v.getID()+" espera en la entrada");
+            escribir(C.AMARILLO, Color.yellow, v.getID()+" espera en la entrada");
             wait();
         }
-        //escribir(C.VERDE, Color.green, v.getID()+" entró al parque");
+        escribir(C.VERDE, Color.green, v.getID()+" entró al parque");
         cant_actual++;
     }
 

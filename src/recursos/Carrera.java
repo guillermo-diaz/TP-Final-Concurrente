@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import GUI.PrintConsola;
 import config.Config;
-import hilos.GomonH;
+import hilos.Gomon;
 import hilos.Visitante;
 import util.C;
 
@@ -22,20 +22,14 @@ public class Carrera {
     private int cant_gomones; // cantidad de gomonos para que salgan
     private int gomones_dobles;
     private int gomones_simples;
-    private BlockingQueue<GomonH> gomonesDobleDisponibles;
-    private BlockingQueue<GomonH> gomonesSimpleDisponibles;
-    private boolean estado_carrera;
-    private Lock carrera = new ReentrantLock();
-    private Condition terminada = carrera.newCondition();
-    private Condition largada = carrera.newCondition();
-    private int gomones_listos;
-
+    private BlockingQueue<Gomon> gomonesDobleDisponibles;
+    private BlockingQueue<Gomon> gomonesSimpleDisponibles;
     private CyclicBarrier barrierCarrera;
 
     private int total_bicis = 15;
     private int bicis_libres;
-    private Lock bicis;
-    private Condition bici_disponible;
+    private Lock bicis = new ReentrantLock();
+    private Condition bici_disponible = bicis.newCondition();
 
     private int capacidad_tren = 10;
     private Lock tren = new ReentrantLock();
@@ -56,25 +50,29 @@ public class Carrera {
         cant_gomones = Config.NUMERO_GOMONES;
         gomonesDobleDisponibles = new LinkedBlockingQueue<>(gomones_dobles);
         gomonesSimpleDisponibles = new LinkedBlockingQueue<>(gomones_simples);
-        estado_carrera = false;
 
         bicis_libres = total_bicis;
 
         barrierCarrera = new CyclicBarrier(cant_gomones, () -> {
-            System.out.println("Empieza Race");
+            try {
+                escribir_carrera(C.BLANCO, Color.WHITE, "Gomones Listos. Comienza la carrera");
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         });
 
         int ids = 1;
-        GomonH g;
+        Gomon g;
 
         for(int i = 1; i <= gomones_dobles; i++){
-            g = new GomonH(p, this,ids, true);
+            g = new Gomon(p, this,ids, true);
             gomonesDobleDisponibles.add(g);
             ids++;
             g.start();
         }
         for(int i = 1; i <= gomones_simples; i++){
-            g = new GomonH(p, this,ids, false);
+            g = new Gomon(p, this,ids, false);
             gomonesSimpleDisponibles.add(g);
             ids++;
             g.start();
@@ -85,8 +83,8 @@ public class Carrera {
   
 
     //agarra un gomon disponible, elige si quiere doble o simple y luego espera q inicie la carrera
-    public GomonH usar_gomon(Visitante v, boolean doble) throws InterruptedException, BrokenBarrierException{  
-        GomonH gomonRet;
+    public Gomon usar_gomon(Visitante v, boolean doble) throws InterruptedException, BrokenBarrierException{  
+        Gomon gomonRet;
 
         if (doble){
             escribir_carrera(C.AMARILLO, Color.YELLOW,"Visitante " + v.getID() + " espera un gomon doble ");    
@@ -104,7 +102,7 @@ public class Carrera {
         return gomonRet;
     }
 
-    public void esperar_largada(GomonH g) throws InterruptedException, BrokenBarrierException{
+    public void esperar_largada(Gomon g) throws InterruptedException, BrokenBarrierException{
         barrierCarrera.await();
         escribir_carrera(C.PURPLE, Color.MAGENTA, g.getNombres()+" inician la carrera");
     }
@@ -114,13 +112,14 @@ public class Carrera {
         while (bicis_libres == 0){
             bici_disponible.await();
         }
-        System.out.println(v.getID()+" agarró bici");
+        escribir_acceso(C.VERDE, Color.GREEN, v.getID()+" agarró bici");
         bicis_libres--;
         bicis.unlock();
     }
 
-    public void dejar_bici(Visitante v) {
+    public void dejar_bici(Visitante v) throws InterruptedException {
         bicis.lock();
+        escribir_acceso(C.ROJO, Color.RED, v.getID()+" dejó bici");
         bicis_libres++;
         bicis.unlock();
     }
@@ -148,7 +147,7 @@ public class Carrera {
         tren.unlock();
     }
 
-    public void bajar_gente(){
+    public void bajar_gente() throws InterruptedException{
         tren.lock();
         pasajeros_actual = 0;
         String cad = "Tren baja a: -";
@@ -157,7 +156,7 @@ public class Carrera {
             cad = cad + v.getID()+" - ";
         }
         cad = cad + "\n";
-        System.out.println(cad);
+        escribir_acceso(C.BLANCO, Color.WHITE, cad);
         bajar.signalAll();
         tren.unlock();
     }
@@ -168,19 +167,19 @@ public class Carrera {
         tren.unlock();
     }
 
-    public void agregar_gomon_simple(GomonH g){
+    public void agregar_gomon_simple(Gomon g){
         gomonesSimpleDisponibles.offer(g);
     }
 
-    public void agregar_gomon_doble(GomonH g){
+    public void agregar_gomon_doble(Gomon g){
         gomonesDobleDisponibles.offer(g);
     }
 
-    public BlockingQueue<GomonH> getGomonesSimples(){
+    public BlockingQueue<Gomon> getGomonesSimples(){
         return this.gomonesSimpleDisponibles;
     }
 
-    public BlockingQueue<GomonH> getGomonesDobles(){
+    public BlockingQueue<Gomon> getGomonesDobles(){
         return this.gomonesDobleDisponibles;
     }
 

@@ -21,6 +21,7 @@ public class Faro {
    private int CANT_TOBOGANES = 2;
    private int escalera_actual = 0;
 
+   //gui
    private Semaphore mutexConsola= new Semaphore(1);
    
    public Faro(Parque p){

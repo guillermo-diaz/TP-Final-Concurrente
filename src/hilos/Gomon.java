@@ -10,7 +10,7 @@ import GUI.PrintConsola;
 import recursos.*;
 import util.C;
 
-public class GomonH extends Thread{
+public class Gomon extends Thread{
     private Parque p;
     private Carrera c;
     private boolean doble;
@@ -26,7 +26,7 @@ public class GomonH extends Thread{
     //gui
     private Semaphore mutexConsola= new Semaphore(1);
 
-    public GomonH(Parque parq, Carrera r, int id, boolean doble){
+    public Gomon(Parque parq, Carrera r, int id, boolean doble){
         this.p = parq;
         this.c = r;
         this.doble = doble;
@@ -46,7 +46,7 @@ public class GomonH extends Thread{
                 dormir(10000); //lo que tarda en hacer la carrera
                 finRace.release(limite);
                 lugares.clear();
-                lugar.release(2);
+                lugar.release(limite);
                 dejarGomon();
             }
         } catch (InterruptedException  | BrokenBarrierException e) {

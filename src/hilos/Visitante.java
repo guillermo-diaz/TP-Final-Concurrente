@@ -10,7 +10,7 @@ import util.C;
 
 public class Visitante extends Thread{
     private final String id;
-    private final String tipo_acceso; // "Particular" o "Tour"
+    public String tipo_acceso; // "Particular" o "Tour"
     private boolean doble;
     private Parque parque;
     public boolean almuerzo;
@@ -28,7 +28,7 @@ public class Visitante extends Thread{
     @Override
     public void run() {
         try {
-            if (tipo_acceso.toLowerCase() == "tour"){
+            if (tipo_acceso.toLowerCase().equals("tour")){
                 parque.acceder_tour(this);
             }
             parque.entrar(this); //intenta entrar
@@ -112,7 +112,7 @@ public class Visitante extends Thread{
                         ir_snorkell();
                         break;
                     default:
-                        // ir_carrera();
+                        ir_carrera();
                         break;
                 }
                 
@@ -171,8 +171,14 @@ public class Visitante extends Thread{
         Carrera car = parque.carrera;
     
         try {
-            // car.acceder_tren(this);
-            GomonH g = car.usar_gomon(this, doble);
+            if (Math.random() < 0.5){
+                car.acceder_tren(this);
+            } else {
+                car.acceder_bici(this);
+                dormir(5000);
+                car.dejar_bici(this);
+            }
+            Gomon g = car.usar_gomon(this, doble);
             g.subir(this);
             g.iniciar_carrera(this);
         } catch (InterruptedException | BrokenBarrierException e) {
