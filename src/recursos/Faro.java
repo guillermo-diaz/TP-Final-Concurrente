@@ -21,6 +21,9 @@ public class Faro {
    private int CANT_TOBOGANES = 2;
    private int escalera_actual = 0;
 
+   private int CAPACIDAD_PLATAFORMA = 10;  // correción para evitar que el faro se llene de gente
+   private Semaphore sem_plataforma;
+
    //gui
    private Semaphore mutexConsola= new Semaphore(1);
    
@@ -28,6 +31,7 @@ public class Faro {
       parque = p;
       CAPACIDAD_ESCALERA = Config.CAPACIDAD_ESCALERA_FARO;
       sem_escalera = new Semaphore(CAPACIDAD_ESCALERA);
+      sem_plataforma = new Semaphore(CAPACIDAD_PLATAFORMA);
       tobogan_usado = 0; 
    }
 
@@ -42,6 +46,7 @@ public class Faro {
       
       escribir(C.VERDE, Color.green,v.getID()+" entro a un tobogan "+tobogan_usado+"/"+CANT_TOBOGANES);
       lock_tobogan.unlock();
+      sem_plataforma.release();
    }
 
    public void dejar_tobogan(Visitante v) throws InterruptedException{
@@ -59,6 +64,7 @@ public class Faro {
    }
 
    public void dejar_escaleras(Visitante v) throws InterruptedException{
+      sem_plataforma.acquire(); //intenta entrar a la plataforma
       escalera_actual--;
       escribir(C.PURPLE, Color.magenta, v.getID()+" termino de subir las escaleras "+escalera_actual+"/"+CAPACIDAD_ESCALERA);
       sem_escalera.release();
