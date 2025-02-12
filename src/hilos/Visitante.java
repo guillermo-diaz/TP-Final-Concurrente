@@ -189,8 +189,9 @@ public class Visitante extends Thread{
                 car.dejar_bici(this);
             }
             Gomon g = car.usar_gomon(this, doble);
-            g.subir(this);
-            g.iniciar_carrera(this);
+            LugarGomon lugar = g.lugarGomon();
+            lugar.subir(this);
+            lugar.esperarFinCarrera(this);
         } catch (InterruptedException | BrokenBarrierException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

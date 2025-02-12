@@ -35,8 +35,8 @@ public class Config {
     
     /* Para probar una actividad en particular, 
     el visitante solo realizará dicha actividad solamente en vez de ser random */
-    public static boolean PRUEBA_INDIVIDUAL = false; 
+    public static boolean PRUEBA_INDIVIDUAL = true; 
     //poner alguna actividad que quiera probar, poner el nombre completo. Ejemplo: restaurante/carrera/faro/tienda/snorkell
-    public static String ACTIVIDAD_AISLADA = "none";  
+    public static String ACTIVIDAD_AISLADA = "carrera";  
 
 }

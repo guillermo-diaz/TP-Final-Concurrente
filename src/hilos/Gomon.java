@@ -16,15 +16,8 @@ public class Gomon extends Thread{
     private boolean doble;
     private int id;
     private int limite;
-    private LinkedList<Visitante> lugares = new LinkedList<>();
-    public boolean carrera = false;
 
-    public Semaphore avisos;
-    private Semaphore lugar;
-    private Semaphore finRace;
-
-    //gui
-    private Semaphore mutexConsola= new Semaphore(1);
+    private LugarGomon lugarGomon;
 
     public Gomon(Parque parq, Carrera r, int id, boolean doble){
         this.p = parq;
@@ -32,21 +25,18 @@ public class Gomon extends Thread{
         this.doble = doble;
         this.id = id;
         this.limite = (doble) ? 2:1;
-        lugar = new Semaphore(limite);
-        avisos = new Semaphore(0);
-        finRace = new Semaphore(0);
+        lugarGomon = new LugarGomon(parq, r, doble);
+
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                esperar_gente();
+                lugarGomon.esperar_gente(); //espera que se suba gente
                 c.esperar_largada(this);   
                 dormir(10000); //lo que tarda en hacer la carrera
-                finRace.release(limite);
-                lugares.clear();
-                lugar.release(limite);
+                lugarGomon.finCarrera(); //avisa a los visitantes que se bajen
                 dejarGomon();
             }
         } catch (InterruptedException  | BrokenBarrierException e) {
@@ -62,25 +52,8 @@ public class Gomon extends Thread{
         }
     }
 
-    public void esperar_gente() throws InterruptedException{
-        avisos.acquire(limite);
-
-        if (doble){
-            escribir(C.VERDE, Color.GREEN,"Visitantes " + getNombres() + " agarraron el gomon doble N°" +id);
-        } else{
-            escribir(C.VERDE, Color.GREEN,"Visitante " + lugares.getLast().getID() + " agarro el gomon simple N°" +id);
-        }
-    }
-
-    public void subir(Visitante v) throws InterruptedException{
-        lugar.acquire();
-        lugares.add(v);
-        avisos.release();
-    }
-
-    public void iniciar_carrera(Visitante v) throws InterruptedException{
-        finRace.acquire(); //espera que termine la carrera y sale
-        escribir(C.ROJO, Color.RED,"Visitante " + v.getID() + " dejó el gomon N°" + id);
+    public LugarGomon lugarGomon(){
+        return lugarGomon;
     }
 
 
@@ -89,15 +62,11 @@ public class Gomon extends Thread{
     }
 
     public boolean vacio(){
-        return lugar.availablePermits() == limite;
+        return lugarGomon.vacio();
     }
 
     public String getNombres(){
-        String cad = "-";
-        for (Visitante v : lugares) {
-            cad = cad + v.getID()+" - ";
-        }
-        return cad + "";
+        return lugarGomon.getNombres();
     }
     
     public void dormir(int bound){
@@ -111,11 +80,4 @@ public class Gomon extends Thread{
     }
 
 
-    private void escribir(String color, Color c, String cad) throws InterruptedException{
-        mutexConsola.acquire();
-        PrintConsola.print(p.consolas[5], c, cad+"\n");
-        mutexConsola.release();
-
-        System.out.println(color+cad+C.RESET);
-    }
 }
