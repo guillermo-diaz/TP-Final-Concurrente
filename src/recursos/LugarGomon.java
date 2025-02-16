@@ -25,11 +25,12 @@ public class LugarGomon {
        //gui
     private Semaphore mutexConsola= new Semaphore(1);
 
-    public LugarGomon (Parque parq, Carrera r, boolean doble){
+    public LugarGomon (Parque parq, Carrera r, boolean doble, int id){
         this.p = parq;
         this.c = r;
         this.doble = doble;
         this.limite = (doble) ? 2:1;
+        this.id = id;
         lugar = new Semaphore(limite);
         avisos = new Semaphore(0);
         finRace = new Semaphore(0);

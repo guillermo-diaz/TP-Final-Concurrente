@@ -25,7 +25,7 @@ public class Gomon extends Thread{
         this.doble = doble;
         this.id = id;
         this.limite = (doble) ? 2:1;
-        lugarGomon = new LugarGomon(parq, r, doble);
+        lugarGomon = new LugarGomon(parq, r, doble, id);
 
     }
 
